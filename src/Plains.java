@@ -1,3 +1,3 @@
-public class Plains {
+public class Plains extends Land {
 
 }

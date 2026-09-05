@@ -1,3 +1,4 @@
-public class Canvas {
+import javax.swing.*;
+public class Canvas extends JFrame{
 
 }

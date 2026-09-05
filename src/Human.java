@@ -1,3 +1,3 @@
-public class Human {
+public class Human extends Empire {
 
 }

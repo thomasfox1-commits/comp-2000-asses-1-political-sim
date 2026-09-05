@@ -1,3 +1,3 @@
-public class Mountain {
+public class Mountain extends Land {
 
 }
