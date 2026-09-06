@@ -7,14 +7,14 @@ public class Canvas extends JFrame{
     Color white = new Color(207,207,207);
     Color darkGrey = new Color(110,110,110);
     public Canvas(){
-        setSize(800,1000);
+        setSize(816,1039);
         setTitle("politicalSim");
         setLayout(null);
         setVisible(true);
         setResizable(false);
         setBackground(white);
-        gameGrid= new Grid();
-        gameGrid.setSize(800,800);
+        gameGrid= new Grid(800,800,25);
+        //gameGrid.setSize(800,800);
         gameGrid.setLocation(0,200);
         gameGrid.setBackground(darkGrey);
         add(gameGrid);
