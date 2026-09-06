@@ -1,24 +1,22 @@
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+import javax.swing.*;
 public class Canvas extends JFrame{
     Grid gameGrid;
     Color white = new Color(207,207,207);
     Color darkGrey = new Color(110,110,110);
     public Canvas(){
-        setSize(816,1039);
+        setSize(613,800);
         setTitle("politicalSim");
         setLayout(null);
-        setVisible(true);
         setResizable(false);
         setBackground(white);
-        gameGrid= new Grid(800,800,25);
-        //gameGrid.setSize(800,800);
-        gameGrid.setLocation(0,200);
+        gameGrid= new Grid(600,600,5);
+        gameGrid.setLocation(0,0);
         gameGrid.setBackground(darkGrey);
         add(gameGrid);
         setUpWindowCloser();
+        setVisible(true);
              
     }
     public Canvas(Grid grid, int width, int height, String title){
@@ -26,10 +24,10 @@ public class Canvas extends JFrame{
         setTitle(title);
         setResizable(false);
         setLayout(null);
-        setVisible(true);
         gameGrid= grid;
         add(gameGrid);
         setUpWindowCloser();
+        setVisible(true);
     }
 
     public void setUpWindowCloser(){
