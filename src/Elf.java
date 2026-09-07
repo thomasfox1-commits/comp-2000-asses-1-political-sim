@@ -1,3 +1,3 @@
-public class Elf extends Land{
+public class Elf extends Empire{
 
 }
