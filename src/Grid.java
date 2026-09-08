@@ -20,8 +20,8 @@ public class Grid extends JPanel{
         tileSizeHeight=getHeight()/gridSize;
         tileID=1;
         Forest placeHolder;
-        for(int x = 0;x<gridSize;x++){
-            for(int y = 0;y<gridSize;y++){
+        for(int y = 0;y<gridSize;y++){
+            for(int x = 0;x<gridSize;x++){
                 placeHolder=new Forest();
                 placeHolder.ID=tileID;
                 placeHolder.setBackground(Color.black);
@@ -29,16 +29,29 @@ public class Grid extends JPanel{
                 placeHolder.setLocation(x*tileSizeWidth , y*tileSizeHeight);
                 add(placeHolder);
                 addTile(tileID,placeHolder);
+
+                if(tileExist(tileID-1)&& tileID%gridSize!=1){
+                    getTile(tileID-1).setRight(placeHolder);
+                    placeHolder.setLeft(getTile(tileID-1));
+                }
+                if(tileExist(tileID-gridSize)){
+                    getTile(tileID-gridSize).setBelow(placeHolder);
+                    placeHolder.setAbove(getTile(tileID-gridSize));
+                }
                 tileID++;
             }
         }
-        gameMap.get(4).setBackground(Color.BLUE);
 
+    }
+    public Land getTile(int ID){
+        return gameMap.get(ID);
     }
     public void addTile(int identifier, Land land){
         gameMap.put(identifier, land);
     }
-    
+    public boolean tileExist(int ID){
+		return gameMap.containsKey(ID);
+	}
 
     
 }

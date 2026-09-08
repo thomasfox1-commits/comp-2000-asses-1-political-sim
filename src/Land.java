@@ -1,7 +1,7 @@
 import javax.swing.*;
-abstract class  Land<Tile extends Land>  extends JPanel  {
+abstract class  Land  extends JPanel  {
     int ID;
-    Tile left,right,above,below;
+    Land left,right,above,below;
     public Land(){
         ID=0;
         left=null;
@@ -16,16 +16,16 @@ abstract class  Land<Tile extends Land>  extends JPanel  {
         above=null;
         below=null;
     }
-    public void setRight(Tile land){
+    public void setRight(Land land){
         right=land;
     }
-    public void setLeft(Tile land){
+    public void setLeft(Land land){
         left=land;
     }
-    public void setAbove(Tile land){
+    public void setAbove(Land land){
         above=land;
     }
-    public void setBelow(Tile land){
-        right=land;
+    public void setBelow(Land land){
+        below=land;
     }
 }
