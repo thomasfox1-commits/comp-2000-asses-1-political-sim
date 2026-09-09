@@ -41,6 +41,11 @@ public class Grid extends JPanel{
                 tileID++;
             }
         }
+        getTile(7).setBackground(Color.pink);
+        getTile(7).left.setBackground(Color.blue);
+        getTile(7).above.setBackground(Color.blue);
+        getTile(7).right.setBackground(Color.blue);
+        getTile(7).below.setBackground(Color.blue);
 
     }
     public Land getTile(int ID){
