@@ -46,17 +46,23 @@ public class Grid extends JPanel{
         getTile(7).above.setBackground(Color.blue);
         getTile(7).right.setBackground(Color.blue);
         getTile(7).below.setBackground(Color.blue);
-
     }
+
     public Land getTile(int ID){
         return gameMap.get(ID);
     }
+
     public void addTile(int identifier, Land land){
         gameMap.put(identifier, land);
     }
+
     public boolean tileExist(int ID){
 		return gameMap.containsKey(ID);
 	}
+    
+    public void update(){
+
+    }
 
     
 }
