@@ -19,20 +19,27 @@ public class Empire {
             return null;
         }
         for(Land l:ownedLand){
-            
+            for(Land x: l.getAdjTiles()){
+                if(!isOwner(x)){
+                    list.add(l);
+                    break;
+                }
+            }
         }
         return list;
     }
-
+    public void addTile(Land tile){
+        ownedLand.add(tile);
+    }
     public Boolean isOwner(Land tile){
         if (ownedLand==null){
             return false;
         }
+        return ownedLand.contains(tile);
+    }
+    public void updateTiles(){
         for(Land l:ownedLand){
-            if(l==tile){
-                return true;
-            }
+            l.setBackground(nationColor);
         }
-        return false;
     }
 }
