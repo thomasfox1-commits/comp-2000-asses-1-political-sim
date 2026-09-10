@@ -28,8 +28,30 @@ public class Empire {
         }
         return list;
     }
+    public ArrayList<Land> getPlayableBorderTiles(){
+        ArrayList<Land> list= new ArrayList<>();
+        if (ownedLand==null){
+            return null;
+        }
+        for(Land l:ownedLand){
+            for(Land x: l.getAdjTiles()){
+                if(!isOwner(x)&&isClaimable(l)){
+                    list.add(l);
+                    break;
+                }
+            }
+        }
+        return list;
+    }
     public void addTile(Land tile){
         ownedLand.add(tile);
+    }
+    public boolean isClaimable(Land tile){
+        //TODO
+        if(tile ==null){
+            return false;
+        }
+        return true;
     }
     public Boolean isOwner(Land tile){
         if (ownedLand==null){
