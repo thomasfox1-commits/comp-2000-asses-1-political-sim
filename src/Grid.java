@@ -43,11 +43,9 @@ public class Grid extends JPanel{
         Empire test=new Empire(Color.GREEN);
         test.addTile(getTile(1));
         test.updateTiles();
-        claimRandomTile(test);
-        claimRandomTile(test);
-        claimRandomTile(test);
-        claimRandomTile(test);
-        claimRandomTile(test);
+        for(int x=0;x<10;x++){
+            claimRandomTile(test);
+        }
         test.updateTiles();
 
     }
