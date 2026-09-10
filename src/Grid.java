@@ -12,7 +12,6 @@ public class Grid extends JPanel{
         //System.out.println("grid tile Width: " + tileSizeWidth + " Height: " + tileSizeHeight);
         createGrid();
 
-        
     }
     public void createGrid(){
         int tileSizeHeight,tileSizeWidth, tileID;
@@ -41,6 +40,16 @@ public class Grid extends JPanel{
                 tileID++;
             }
         }
+        Empire test=new Empire(Color.GREEN);
+        test.addTile(getTile(1));
+        test.updateTiles();
+        claimRandomTile(test);
+        claimRandomTile(test);
+        claimRandomTile(test);
+        claimRandomTile(test);
+        claimRandomTile(test);
+        test.updateTiles();
+
     }
 
     public Land getTile(int ID){
@@ -57,6 +66,31 @@ public class Grid extends JPanel{
     
     public void update(){
 
+    }
+    public void claimRandomTile(Empire faction){
+        ArrayList<Land> list = faction.getPlayableBorderTiles();
+        Land borderTile, tileToclaim;
+        //int num2 =0;
+        borderTile=list.get((int)(Math.random()*list.size()));
+        list=borderTile.getAdjTiles();
+        int num=(int)(Math.random()*list.size());
+        tileToclaim=null;
+
+        while(faction.isOwner(tileToclaim)||!faction.isClaimable(tileToclaim)){
+            // System.out.println("tile i'm chcking from: "+ borderTile.ID+" adjTile trying to take = " +num+ " is Owner = "+ faction.isOwner(tileToclaim) + " is claimable = "+ faction.isClaimable(tileToclaim));
+            // if(tileToclaim!=null){
+            //     System.out.println(tileToclaim.ID);
+            // }
+            num=(int)(Math.random()*list.size());
+            tileToclaim=list.get(num);
+            // if(num2>=25){
+            //     System.out.println("loop occured");
+            //     return;
+            // }
+            // num2++;
+        }
+        //System.out.println("\ntile taken\n");
+        faction.addTile(tileToclaim);
     }
 
     

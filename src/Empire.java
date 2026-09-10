@@ -54,8 +54,8 @@ public class Empire {
         return true;
     }
     public Boolean isOwner(Land tile){
-        if (ownedLand==null){
-            return false;
+        if(tile ==null){
+            return true;
         }
         return ownedLand.contains(tile);
     }
