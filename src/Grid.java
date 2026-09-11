@@ -67,6 +67,7 @@ public class Grid extends JPanel{
         for(int i = 0; i < factions.size(); i++)
         {
             Empire faction = factions.get(i);
+            faction.updateTiles();
             if (Math.random() > 0.5 || faction.getImprovableCount() == 0)
             {
                 for(int j = 0; j < faction.getTroops(); j++)
