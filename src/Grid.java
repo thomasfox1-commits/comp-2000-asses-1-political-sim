@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.*;
+import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
 public class Grid extends JPanel{
     TreeMap<Integer,Land> gameMap;
@@ -19,10 +20,20 @@ public class Grid extends JPanel{
         tileSizeWidth=getWidth()/gridSize;
         tileSizeHeight=getHeight()/gridSize;
         tileID=1;
-        Forest placeHolder;
+        Land placeHolder;
         for(int y = 0;y<gridSize;y++){
             for(int x = 0;x<gridSize;x++){
-                placeHolder=new Forest();
+                double terrainType = Math.random();
+                if (terrainType <= 0.2){
+                    placeHolder=new Forest();
+                }
+                else if (terrainType >= 0.9){
+                    placeHolder=new Mountain();
+                }
+                else
+                {
+                    placeHolder=new Plains();
+                }
                 placeHolder.ID=tileID;
                 placeHolder.setBackground(Color.black);
                 placeHolder.setSize(tileSizeWidth-1, tileSizeHeight-1);
@@ -53,11 +64,27 @@ public class Grid extends JPanel{
     }
 
     public void updateTurn(){
-        for(int i = 0; i < factions.size(); i++){
-            claimRandomTile(factions.get(i));
-            factions.get(i).updateTiles();
+        for(int i = 0; i < factions.size(); i++)
+        {
+            Empire faction = factions.get(i);
+            if (Math.random() > 0.5 || faction.getImprovableCount() == 0)
+            {
+                for(int j = 0; j < faction.getTroops(); j++)
+                {
+                    claimRandomTile(faction);
+                    faction.updateTiles();
+                }
+            }
+            else
+            {
+                faction.improveTile();
+            }
+
+            System.out.println("Faction " + i + " Troops: " + faction.getTroops());
+            System.out.println("Faction " + i + " Total Tiles: " + faction.getTileCount());
+            System.out.println("Faction " + i + " Improvable Tiles: " + faction.getImprovableCount());
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
-        
     }
 
     public Land getTile(int ID){

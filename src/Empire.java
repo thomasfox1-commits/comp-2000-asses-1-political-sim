@@ -2,15 +2,22 @@ import java.awt.*;
 import java.util.*;
 public class Empire {
     ArrayList<Land> ownedLand;
+    ArrayList<Land> improvables;
     Color nationColor;
+    int troops;
+
     public Empire(){
         ownedLand= new ArrayList<>();
+        improvables = new ArrayList<>();
         nationColor = Color.white;
+        troops = 1;
     }
 
     public Empire(Color col){
         ownedLand= new ArrayList<>();
+        improvables = new ArrayList<>();
         nationColor = col;
+        troops = 1;
     }
 
     public ArrayList<Land> getBorderTiles(){
@@ -45,6 +52,21 @@ public class Empire {
     }
     public void addTile(Land tile){
         ownedLand.add(tile);
+
+        if (tile instanceof Improvable){
+            improvables.add(tile);
+        }
+
+        if (tile.owner != null)
+        {
+            tile.owner.ownedLand.remove(tile);
+            if(tile.owner.improvables.contains(tile))
+            {
+                tile.owner.improvables.remove(tile);
+            }
+        }
+
+        tile.owner = this;
     }
     public boolean isClaimable(Land tile){
         //TODO
@@ -63,5 +85,31 @@ public class Empire {
         for(Land l:ownedLand){
             l.setBackground(nationColor);
         }
+    }
+    public void improveTile()
+    {
+        Land l = improvables.get((int)Math.floor(Math.random() * improvables.size()));
+        if (l instanceof Improvable tile && tile.getBonus() < 1)
+        {
+            l.setBackground(Color.YELLOW);
+            tile.levelUp();
+        }
+        else
+        {
+            troops++;
+            improvables.remove(l);
+        }
+    }
+    public int getImprovableCount()
+    {
+        return improvables.size();
+    }
+    public int getTroops()
+    {
+        return troops;
+    }
+    public int getTileCount()
+    {
+        return ownedLand.size();
     }
 }
