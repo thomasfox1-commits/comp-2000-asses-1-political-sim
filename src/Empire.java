@@ -96,6 +96,7 @@ public class Empire {
         }
         else
         {
+            l.setBackground(Color.ORANGE);
             troops++;
             improvables.remove(l);
         }
