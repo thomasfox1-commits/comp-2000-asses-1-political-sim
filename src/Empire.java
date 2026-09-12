@@ -48,7 +48,7 @@ public class Empire {
         }
         for(Land l:ownedLand){
             for(Land x: l.getAdjTiles()){
-                if(!isOwner(x)&&isClaimable(l)&&!allies.contains(x.getOwner())){
+                if(!isOwner(x)&&isClaimable(x)){
                     list.add(l);
                     break;
                 }
