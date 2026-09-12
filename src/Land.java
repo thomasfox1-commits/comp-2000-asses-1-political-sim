@@ -3,7 +3,7 @@ import javax.swing.*;
 abstract class  Land  extends JPanel  {
     int ID;
     Land left,right,above,below;
-    Empire owner;
+    private Empire owner;
 
     public Land(){
         ID=0;
@@ -49,5 +49,15 @@ abstract class  Land  extends JPanel  {
         list.add(below);
         list.add(left);
         return list;
+    }
+
+    public Empire getOwner() 
+    {
+        return owner;
+    }
+
+    public void setOwner(Empire owner)
+    {
+        this.owner = owner;
     }
 }
