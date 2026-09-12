@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.*;
+import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
 public class Grid extends JPanel{
     TreeMap<Integer,Land> gameMap;
@@ -19,10 +20,20 @@ public class Grid extends JPanel{
         tileSizeWidth=getWidth()/gridSize;
         tileSizeHeight=getHeight()/gridSize;
         tileID=1;
-        Forest placeHolder;
+        Land placeHolder;
         for(int y = 0;y<gridSize;y++){
             for(int x = 0;x<gridSize;x++){
-                placeHolder=new Forest();
+                double terrainType = Math.random();
+                if (terrainType <= 0.2){
+                    placeHolder=new Forest();
+                }
+                else if (terrainType >= 0.9){
+                    placeHolder=new Mountain();
+                }
+                else
+                {
+                    placeHolder=new Plains();
+                }
                 placeHolder.ID=tileID;
                 placeHolder.setBackground(Color.black);
                 placeHolder.setSize(tileSizeWidth-1, tileSizeHeight-1);
@@ -42,22 +53,52 @@ public class Grid extends JPanel{
             }
         }
         factions = new ArrayList<>();
-        Empire test=new Empire(Color.GREEN);
-        test.addTile(getTile(1));
+        Empire test=new Empire(Color.GREEN, 1);
+        Land startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
+        test.addTile(startLand);
         test.updateTiles();
         factions.add(test);
-        Empire test2=new Empire(Color.RED);
-        test2.addTile(getTile(5 ));
+        Empire test2=new Empire(Color.RED, 2);
+        while (startLand.owner != null)
+        {
+            startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
+        }
+        test2.addTile(startLand);
         test2.updateTiles();
         factions.add(test2);
+        Empire test3=new Empire(Color.BLUE, 3);
+        while (startLand.owner != null)
+        {
+            startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
+        }
+        test3.addTile(startLand);
+        test3.updateTiles();
+        factions.add(test3);
     }
 
     public void updateTurn(){
-        for(int i = 0; i < factions.size(); i++){
-            claimRandomTile(factions.get(i));
-            factions.get(i).updateTiles();
+        for(int i = 0; i < factions.size(); i++)
+        {
+            Empire faction = factions.get(i);
+            faction.updateTiles();
+            if (Math.random() > 0.5 || faction.getImprovableCount() == 0)
+            {
+                for(int j = 0; j < faction.getTroops(); j++)
+                {
+                    claimRandomTile(faction);
+                    faction.updateTiles();
+                }
+            }
+            else
+            {
+                faction.improveTile();
+            }
+
+            System.out.println("Faction " + faction.getID() + " Troops: " + faction.getTroops());
+            System.out.println("Faction " + faction.getID() + " Total Tiles: " + faction.getTileCount());
+            System.out.println("Faction " + faction.getID() + " Improvable Tiles: " + faction.getImprovableCount());
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
-        
     }
 
     public Land getTile(int ID){
@@ -79,7 +120,15 @@ public class Grid extends JPanel{
         ArrayList<Land> list = faction.getPlayableBorderTiles();
         Land borderTile, tileToclaim;
         //int num2 =0;
-        borderTile=list.get((int)(Math.random()*list.size()));
+        try
+        {
+            borderTile=list.get((int)(Math.random()*list.size()));
+        }
+        catch(IndexOutOfBoundsException e) 
+        {
+            factions.remove(faction);
+            return;
+        }
         list=borderTile.getAdjTiles();
         int num=(int)(Math.random()*list.size());
         tileToclaim=null;

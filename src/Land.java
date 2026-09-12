@@ -1,15 +1,17 @@
 import java.util.ArrayList;
-
 import javax.swing.*;
 abstract class  Land  extends JPanel  {
     int ID;
     Land left,right,above,below;
+    Empire owner;
+
     public Land(){
         ID=0;
         left=null;
         right=null;
         above=null;
         below=null;
+        owner = null;
     }
     public Land(int identifier){
         ID=identifier;
@@ -17,6 +19,7 @@ abstract class  Land  extends JPanel  {
         right=null;
         above=null;
         below=null;
+        owner = null;
     }
 
     public void setRight(Land land){
