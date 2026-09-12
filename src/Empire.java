@@ -7,12 +7,12 @@ public class Empire {
     int troops;
     int ID;
 
-    public Empire(int ID){
+    public Empire(){
         ownedLand= new ArrayList<>();
         improvables = new ArrayList<>();
         nationColor = Color.white;
         troops = 1;
-        this.ID = ID;
+        this.ID = 0;
     }
 
     public Empire(Color col, int ID){
