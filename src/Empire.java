@@ -5,19 +5,22 @@ public class Empire {
     ArrayList<Land> improvables;
     Color nationColor;
     int troops;
+    int ID;
 
-    public Empire(){
+    public Empire(int ID){
         ownedLand= new ArrayList<>();
         improvables = new ArrayList<>();
         nationColor = Color.white;
         troops = 1;
+        this.ID = ID;
     }
 
-    public Empire(Color col){
+    public Empire(Color col, int ID){
         ownedLand= new ArrayList<>();
         improvables = new ArrayList<>();
         nationColor = col;
         troops = 1;
+        this.ID = ID;
     }
 
     public ArrayList<Land> getBorderTiles(){
@@ -112,5 +115,9 @@ public class Empire {
     public int getTileCount()
     {
         return ownedLand.size();
+    }
+    public int getID()
+    {
+        return ID;
     }
 }
