@@ -3,6 +3,7 @@ import java.util.*;
 public class Empire {
     ArrayList<Land> ownedLand;
     ArrayList<Land> improvables;
+    ArrayList<Empire> allies;
     Color nationColor;
     int troops;
     int ID;
@@ -10,6 +11,7 @@ public class Empire {
     public Empire(){
         ownedLand= new ArrayList<>();
         improvables = new ArrayList<>();
+        allies = new ArrayList<>();
         nationColor = Color.white;
         troops = 1;
         this.ID = 0;
@@ -18,6 +20,7 @@ public class Empire {
     public Empire(Color col, int ID){
         ownedLand= new ArrayList<>();
         improvables = new ArrayList<>();
+        allies = new ArrayList<>();
         nationColor = col;
         troops = 1;
         this.ID = ID;
@@ -45,7 +48,7 @@ public class Empire {
         }
         for(Land l:ownedLand){
             for(Land x: l.getAdjTiles()){
-                if(!isOwner(x)&&isClaimable(l)){
+                if(!isOwner(x)&&isClaimable(x)){
                     list.add(l);
                     break;
                 }
@@ -60,20 +63,20 @@ public class Empire {
             improvables.add(tile);
         }
 
-        if (tile.owner != null)
+        if (tile.getOwner() != null)
         {
-            tile.owner.ownedLand.remove(tile);
-            if(tile.owner.improvables.contains(tile))
+            tile.getOwner().ownedLand.remove(tile);
+            if(tile.getOwner().improvables.contains(tile))
             {
-                tile.owner.improvables.remove(tile);
+                tile.getOwner().improvables.remove(tile);
             }
         }
 
-        tile.owner = this;
+        tile.setOwner(this);
     }
     public boolean isClaimable(Land tile){
         //TODO
-        if(tile ==null){
+        if(tile ==null || allies.contains(tile.getOwner())){
             return false;
         }
         return true;
@@ -85,6 +88,11 @@ public class Empire {
         return ownedLand.contains(tile);
     }
     public void updateTiles(){
+        if(ownedLand.isEmpty())
+        {
+            throw new IndexOutOfBoundsException();
+        }
+
         for(Land l:ownedLand){
             l.setBackground(nationColor);
         }
@@ -119,5 +127,20 @@ public class Empire {
     public int getID()
     {
         return ID;
+    }
+    public void ally(Empire other)
+    {
+        if (!allies.contains(other))
+        {
+            allies.add(other);
+        }
+        else
+        {
+            allies.remove(other);
+        }
+    }
+    public ArrayList<Empire> getAllies()
+    {
+        return allies;
     }
 }

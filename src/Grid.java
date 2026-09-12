@@ -53,13 +53,13 @@ public class Grid extends JPanel{
             }
         }
         factions = new ArrayList<>();
-        Empire test=new Empire(Color.GREEN, 1);
+        Empire test=new Empire(Color.RED, 1);
         Land startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
         test.addTile(startLand);
         test.updateTiles();
         factions.add(test);
-        Empire test2=new Empire(Color.RED, 2);
-        while (startLand.owner != null)
+        Empire test2=new Empire(Color.GREEN, 2);
+        while (startLand.getOwner() != null)
         {
             startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
         }
@@ -67,7 +67,7 @@ public class Grid extends JPanel{
         test2.updateTiles();
         factions.add(test2);
         Empire test3=new Empire(Color.BLUE, 3);
-        while (startLand.owner != null)
+        while (startLand.getOwner() != null)
         {
             startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
         }
@@ -77,26 +77,61 @@ public class Grid extends JPanel{
     }
 
     public void updateTurn(){
+        for (int i = 0; i < 20; i++)
+        {
+            System.out.println();
+        }
+
+        ArrayList<Integer> skipTurns = new ArrayList<>();
         for(int i = 0; i < factions.size(); i++)
         {
             Empire faction = factions.get(i);
-            faction.updateTiles();
-            if (Math.random() > 0.5 || faction.getImprovableCount() == 0)
+            if (!skipTurns.contains(i))
             {
-                for(int j = 0; j < faction.getTroops(); j++)
+                try
                 {
-                    claimRandomTile(faction);
                     faction.updateTiles();
                 }
-            }
-            else
-            {
-                faction.improveTile();
+                catch (IndexOutOfBoundsException e)
+                {
+                    factions.remove(faction);
+                    i--;
+                    continue;
+                }
+                if (Math.random() > 0.5)
+                {
+                    for(int j = 0; j < faction.getTroops(); j++)
+                    {
+                        claimRandomTile(faction);
+                        faction.updateTiles();
+                    }
+                }
+                else
+                {
+                    if ((Math.random() > 0.1 || i >= factions.size()-1) && faction.getImprovableCount() != 0)
+                    {
+                        faction.improveTile();
+                    }
+                    else
+                    {
+                        int allianceInd = (int)Math.floor((factions.size()-i)*Math.random()+i);
+                        faction.ally(factions.get(allianceInd));
+                        factions.get(allianceInd).ally(faction);
+                        skipTurns.add(allianceInd);
+                    }
+                }
             }
 
             System.out.println("Faction " + faction.getID() + " Troops: " + faction.getTroops());
             System.out.println("Faction " + faction.getID() + " Total Tiles: " + faction.getTileCount());
             System.out.println("Faction " + faction.getID() + " Improvable Tiles: " + faction.getImprovableCount());
+            for (int j = 0; j < faction.getAllies().size(); j++)
+            {
+                if (factions.contains(faction.getAllies().get(j)))
+                {
+                    System.out.println("Faction " + faction.getID() + " Allied With " + faction.getAllies().get(j).getID());
+                }
+            }
             System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
     }
@@ -118,17 +153,13 @@ public class Grid extends JPanel{
     }
     public void claimRandomTile(Empire faction){
         ArrayList<Land> list = faction.getPlayableBorderTiles();
-        Land borderTile, tileToclaim;
-        //int num2 =0;
-        try
+        if (list.isEmpty())
         {
-            borderTile=list.get((int)(Math.random()*list.size()));
-        }
-        catch(IndexOutOfBoundsException e) 
-        {
-            factions.remove(faction);
             return;
         }
+        Land borderTile, tileToclaim;
+        //int num2 =0;
+        borderTile=list.get((int)(Math.random()*list.size()));
         list=borderTile.getAdjTiles();
         int num=(int)(Math.random()*list.size());
         tileToclaim=null;
