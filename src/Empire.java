@@ -76,7 +76,7 @@ public class Empire {
     }
     public boolean isClaimable(Land tile){
         //TODO
-        if(tile ==null || allies.contains(tile.getOwner())){
+        if(tile ==null || allies.contains(tile.getOwner()) || tile instanceof Impassable){
             return false;
         }
         return true;

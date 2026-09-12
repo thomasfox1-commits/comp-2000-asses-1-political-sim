@@ -1,3 +1,3 @@
-public class Mountain extends Land {
+public class Mountain extends Land implements Impassable {
 
 }

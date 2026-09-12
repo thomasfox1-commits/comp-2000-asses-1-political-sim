@@ -26,16 +26,19 @@ public class Grid extends JPanel{
                 double terrainType = Math.random();
                 if (terrainType <= 0.2){
                     placeHolder=new Forest();
+                    placeHolder.setBackground(Color.black);
                 }
                 else if (terrainType >= 0.9){
                     placeHolder=new Mountain();
+                    placeHolder.setBackground(Color.gray);
                 }
                 else
                 {
                     placeHolder=new Plains();
+                    placeHolder.setBackground(Color.black);
                 }
                 placeHolder.ID=tileID;
-                placeHolder.setBackground(Color.black);
+                
                 placeHolder.setSize(tileSizeWidth-1, tileSizeHeight-1);
                 placeHolder.setLocation(x*tileSizeWidth , y*tileSizeHeight);
                 add(placeHolder);
