@@ -60,9 +60,9 @@ public class Grid extends JPanel{
         Land startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
         for (int i = 0; i < factCount; i++)
         {
-            int redVal = 55+(200/((int)Math.ceil(Math.cbrt(factCount)-1)))*(i%(int)Math.ceil(Math.cbrt(factCount)));
-            int greenVal = 55+(200/((int)Math.ceil(Math.cbrt(factCount)-1)))*((int)(Math.floor(i/(int)Math.ceil(Math.cbrt(factCount))))%(int)Math.ceil(Math.cbrt(factCount)));
-            int blueVal = 55+(200/((int)Math.ceil(Math.cbrt(factCount)-1)))*((int)(Math.floor(i/((int)Math.ceil(Math.cbrt(factCount))*(int)Math.ceil(Math.cbrt(factCount)))))%(int)Math.ceil(Math.cbrt(factCount)));
+            int redVal = 100+(155/((int)Math.ceil(Math.cbrt(factCount)-1)))*(i%(int)Math.ceil(Math.cbrt(factCount)));
+            int greenVal = 100+(155/((int)Math.ceil(Math.cbrt(factCount)-1)))*((int)(Math.floor(i/(int)Math.ceil(Math.cbrt(factCount))))%(int)Math.ceil(Math.cbrt(factCount)));
+            int blueVal = 100+(155/((int)Math.ceil(Math.cbrt(factCount)-1)))*((int)(Math.floor(i/((int)Math.ceil(Math.cbrt(factCount))*(int)Math.ceil(Math.cbrt(factCount)))))%(int)Math.ceil(Math.cbrt(factCount)));
             Color factCol = new Color(redVal, greenVal, blueVal);
 
             //RANDOMISED COLOURS (CAN LOOP FOREVER WITH TOO MANY FACTIONS)

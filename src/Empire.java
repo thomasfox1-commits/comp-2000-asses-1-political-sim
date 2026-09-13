@@ -102,12 +102,13 @@ public class Empire {
         Land l = improvables.get((int)Math.floor(Math.random() * improvables.size()));
         if (l instanceof Improvable tile && tile.getBonus() < 1)
         {
-            l.setBackground(Color.YELLOW);
+
+            l.setBackground(Color.lightGray);
             tile.levelUp();
         }
         else
         {
-            l.setBackground(Color.ORANGE);
+            l.setBackground(Color.darkGray);
             troops++;
             improvables.remove(l);
         }
