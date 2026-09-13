@@ -143,4 +143,8 @@ public class Empire {
     {
         return allies;
     }
+    public Color getColor()
+    {
+        return nationColor;
+    }
 }
