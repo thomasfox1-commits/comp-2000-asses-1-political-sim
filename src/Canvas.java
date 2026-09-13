@@ -1,9 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.*;
 public class Canvas extends JFrame{
     Grid gameGrid;
     JButton turnButton;
+    JButton autoButton;
+    java.util.Timer autoNext;
+    java.util.TimerTask nextTurn;
     Color white = new Color(207,207,207);
     Color darkGrey = new Color(110,110,110);
     public Canvas(){
@@ -17,11 +22,17 @@ public class Canvas extends JFrame{
         gameGrid.setBackground(darkGrey);
         add(gameGrid);
         turnButton = new JButton("Next Turn");
-        turnButton.setSize(300,100);
+        turnButton.setSize(250,100);
         turnButton.setVisible(true);
-        turnButton.setLocation(300,650);
+        turnButton.setLocation(325,650);
         turnButton.addActionListener(l -> nextTurnPressed(gameGrid));
         add(turnButton);
+        autoButton = new JButton("Auto Turns");
+        autoButton.setSize(250,100);
+        autoButton.setVisible(true);
+        autoButton.setLocation(25,650);
+        autoButton.addActionListener(l -> toggleAutoTurns(gameGrid));
+        add(autoButton);
         setUpWindowCloser();
         setVisible(true);
     }
@@ -54,5 +65,22 @@ public class Canvas extends JFrame{
     public void nextTurnPressed(Grid gameGrid)
     {
         gameGrid.updateTurn();
+    }
+
+    public void toggleAutoTurns(Grid gameGrid)
+    {
+        if (autoNext == null)
+        {
+            nextTurn = new TimerTask(){public void run(){gameGrid.updateTurn();}};
+
+            autoNext = new Timer();
+
+            autoNext.schedule(nextTurn, 0, 100);
+        }
+        else
+        {
+            autoNext.cancel();
+            autoNext = null;
+        }
     }
 }
