@@ -64,7 +64,10 @@ public class Canvas extends JFrame{
 
     public void nextTurnPressed(Grid gameGrid)
     {
-        gameGrid.updateTurn();
+        if (autoNext == null)
+        {
+            gameGrid.updateTurn();
+        }
     }
 
     public void toggleAutoTurns(Grid gameGrid)
