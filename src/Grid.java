@@ -78,6 +78,23 @@ public class Grid extends JPanel{
         test3.updateTiles();
         factions.add(test3);
     }
+    public void addPlayer(int speciesNum){
+        Empire Species;
+        switch (speciesNum) {
+            case 0:
+                //Species=new Human(new Color(255,231,(int)(Math.random())),0);
+                break;
+            case 1:
+                Species=new Elf();
+                break;
+            default:
+                System.out.println("invalid species num");
+                return;
+        }
+        
+        
+
+    }
 
     public void updateTurn(){
         for (int i = 0; i < 20; i++)
