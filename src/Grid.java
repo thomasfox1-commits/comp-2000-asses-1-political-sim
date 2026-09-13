@@ -91,7 +91,7 @@ public class Grid extends JPanel{
             */
 
             Empire faction = new Empire(factCol, i+1);
-            while (startLand.getOwner() != null)
+            while (startLand.getOwner() != null || startLand instanceof Impassable)
             {
                 startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
             }
