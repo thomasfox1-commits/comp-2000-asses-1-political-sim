@@ -17,7 +17,7 @@ public class Canvas extends JFrame{
         setLayout(null);
         setResizable(false);
         setBackground(white);
-        gameGrid= new Grid(600,600,50,30);
+        gameGrid= new Grid(600,600,50,7);
         gameGrid.setLocation(0,0);
         gameGrid.setBackground(darkGrey);
         add(gameGrid);
