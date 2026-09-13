@@ -2,10 +2,16 @@ import java.awt.*;
 import java.util.*;
 import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
+
 public class Grid extends JPanel{
+    enum species{
+        human,elf
+    }
     TreeMap<Integer,Land> gameMap;
     int gridSize;
     ArrayList<Empire> factions;
+
+
     public <E extends Land> Grid(int width,int height, int gridSize){
         gameMap = new TreeMap<Integer,Land>();
         this.gridSize = gridSize;
@@ -55,6 +61,7 @@ public class Grid extends JPanel{
                 tileID++;
             }
         }
+
         factions = new ArrayList<>();
         Empire test=new Empire(Color.RED, 1);
         Land startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
@@ -66,6 +73,7 @@ public class Grid extends JPanel{
         {
             startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
         }
+
         test2.addTile(startLand);
         test2.updateTiles();
         factions.add(test2);
@@ -74,24 +82,26 @@ public class Grid extends JPanel{
         {
             startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
         }
+
         test3.addTile(startLand);
         test3.updateTiles();
         factions.add(test3);
     }
-    public void addPlayer(int speciesNum){
-        Empire Species;
-        switch (speciesNum) {
-            case 0:
-                //Species=new Human(new Color(255,231,(int)(Math.random())),0);
+
+    public void addPlayer(species people,Color factionCol, int ID){
+        Empire player;
+        switch (people) {
+            case human:
+                player= new Human(factionCol,ID); 
+            
                 break;
-            case 1:
-                Species=new Elf();
+            case elf:
+                player=new Elf(factionCol,ID);
                 break;
             default:
-                System.out.println("invalid species num");
+                System.out.println("invalid species");
                 return;
         }
-        
         
 
     }
