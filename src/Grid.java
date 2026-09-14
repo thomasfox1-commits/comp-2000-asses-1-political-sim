@@ -4,9 +4,7 @@ import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
 
 public class Grid extends JPanel{
-    enum species{
-        human,elf
-    }
+
     TreeMap<Integer,Land> gameMap;
     int gridSize;
     ArrayList<Empire> factions;
@@ -19,7 +17,8 @@ public class Grid extends JPanel{
         setLayout(null);;
         //System.out.println("grid tile Width: " + tileSizeWidth + " Height: " + tileSizeHeight);
         createGrid();
-
+        
+        
     }
     public void createGrid(){
         int tileSizeHeight,tileSizeWidth, tileID;
@@ -63,49 +62,49 @@ public class Grid extends JPanel{
         }
 
         factions = new ArrayList<>();
-        Empire test=new Empire(Color.RED, 1);
-        Land startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
-        test.addTile(startLand);
-        test.updateTiles();
-        factions.add(test);
-        Empire test2=new Empire(Color.GREEN, 2);
-        while (startLand.getOwner() != null)
-        {
-            startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
-        }
-
-        test2.addTile(startLand);
-        test2.updateTiles();
-        factions.add(test2);
-        Empire test3=new Empire(Color.BLUE, 3);
-        while (startLand.getOwner() != null)
-        {
-            startLand = getTile((int)Math.floor(Math.random()*gridSize*gridSize)+1);
-        }
-
-        test3.addTile(startLand);
-        test3.updateTiles();
-        factions.add(test3);
+        addPlayer(3, Color.BLUE, 1);
+        addPlayer(2, Color.red, 2);
+        addPlayer(2, Color.green, 3);
+        addPlayer(1,Color.CYAN,4);
     }
 
-    public void addPlayer(species people,Color factionCol, int ID){
+    public void addPlayer(int people,Color factionCol, int ID){
         Empire player;
+        Land firstLand=null;
+
         switch (people) {
-            case human:
+            case 1:
                 player= new Human(factionCol,ID); 
-            
                 break;
-            case elf:
+            case 2:
                 player=new Elf(factionCol,ID);
                 break;
             default:
-                System.out.println("invalid species");
-                return;
+                player=new Empire(factionCol,ID);
+                System.out.println("invalid species num");
+                break;
         }
-        
+    
+        while(!player.isClaimable(firstLand) ||findOwner(firstLand)!=null){
+            System.out.println("finding tile to live");
+            firstLand=getTile((int)(Math.random()*gameMap.size()));
+        }
 
+        player.addTile(firstLand);
+        factions.add(player);
+        player.updateTiles();
     }
 
+    public Empire findOwner(Land tile){
+        
+        for(Empire e: factions){
+            if(e.isOwner(tile)&&tile!=null){
+                return e;
+            }
+        }
+        return null;
+    }
+    
     public void updateTurn(){
         for (int i = 0; i < 20; i++)
         {
@@ -183,33 +182,22 @@ public class Grid extends JPanel{
     }
     public void claimRandomTile(Empire faction){
         ArrayList<Land> list = faction.getPlayableBorderTiles();
+        Land borderTile, tileToclaim;
         if (list.isEmpty())
         {
             return;
         }
-        Land borderTile, tileToclaim;
-        //int num2 =0;
+
         borderTile=list.get((int)(Math.random()*list.size()));
         list=borderTile.getAdjTiles();
         int num=(int)(Math.random()*list.size());
         tileToclaim=null;
 
         while(faction.isOwner(tileToclaim)||!faction.isClaimable(tileToclaim)){
-            // System.out.println("tile i'm chcking from: "+ borderTile.ID+" adjTile trying to take = " +num+ " is Owner = "+ faction.isOwner(tileToclaim) + " is claimable = "+ faction.isClaimable(tileToclaim));
-            // if(tileToclaim!=null){
-            //     System.out.println(tileToclaim.ID);
-            // }
             num=(int)(Math.random()*list.size());
             tileToclaim=list.get(num);
-            // if(num2>=25){
-            //     System.out.println("loop occured");
-            //     return;
-            // }
-            // num2++;
         }
-        //System.out.println("\ntile taken\n");
+
         faction.addTile(tileToclaim);
     }
-
-    
 }

@@ -58,7 +58,6 @@ public class Empire {
     }
     public void addTile(Land tile){
         ownedLand.add(tile);
-
         if (tile instanceof Improvable){
             improvables.add(tile);
         }
