@@ -12,4 +12,10 @@ public class Forest extends Land implements Improvable{
     public double getBonus(){
         return growthBonus;
     }
+
+    @Override
+    public void drawLand() {
+        // TODO Auto-generated method stub
+        super.drawLand();
+    }
 }
