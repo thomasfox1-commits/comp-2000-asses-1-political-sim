@@ -19,7 +19,6 @@ public class Mountain extends Land implements Impassable {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // TODO Auto-generated method stub
         super.paintComponent(g);
 
         g.drawPolyline(xPoints, yPoints, xPoints.length);

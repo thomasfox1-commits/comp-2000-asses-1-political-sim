@@ -3,7 +3,7 @@ import java.awt.Graphics;
 
 public class Forest extends Land implements Improvable{
     private double growthBonus;
-    
+
     int[] xPoints = {5, 30, 50, 70, 95};
     int[] yPoints = {75, 15, 60, 15, 75};
     int[] firstRect = {25, 75};
@@ -25,7 +25,6 @@ public class Forest extends Land implements Improvable{
 
     @Override
     public void drawLand(int width, int height) {
-        // TODO Auto-generated method stub
         super.drawLand(width, height);
 
         for(int i = 0; i < xPoints.length; i++){
@@ -49,7 +48,6 @@ public class Forest extends Land implements Improvable{
 
     @Override
     protected void paintComponent(Graphics g) {
-        // TODO Auto-generated method stub
         super.paintComponent(g);
         g.setColor(Color.GREEN);
         g.fillRect(firstRect[0], firstRect[1], rectX, rectY);
