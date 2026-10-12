@@ -12,15 +12,25 @@ public class Grid extends JPanel{
 
     public <E extends Land> Grid(int width,int height, int gridSize){
         gameMap = new TreeMap<Integer,Land>();
+        factions = new ArrayList<>();
         this.gridSize = gridSize;
         setSize(width,height);
         setLayout(null);;
         //System.out.println("grid tile Width: " + tileSizeWidth + " Height: " + tileSizeHeight);
         createGrid();
-        
-        
+        initalizePlayers(4);
     }
-    public void createGrid(){
+
+    private void initalizePlayers(int playerAmount){
+        int raceCount=2;
+        for(int i=0;i<playerAmount;i++){
+            addPlayer((int)(Math.random()*raceCount),Color.CYAN,i);
+
+        }
+
+    }
+
+    private void createGrid(){
         int tileSizeHeight,tileSizeWidth, tileID;
         tileSizeWidth=getWidth()/gridSize;
         tileSizeHeight=getHeight()/gridSize;
@@ -60,12 +70,6 @@ public class Grid extends JPanel{
                 tileID++;
             }
         }
-
-        factions = new ArrayList<>();
-        addPlayer(3, Color.BLUE, 1);
-        addPlayer(2, Color.red, 2);
-        addPlayer(2, Color.green, 3);
-        addPlayer(1,Color.CYAN,4);
     }
 
     public void addPlayer(int people,Color factionCol, int ID){
@@ -81,12 +85,10 @@ public class Grid extends JPanel{
                 break;
             default:
                 player=new Empire(factionCol,ID);
-                System.out.println("invalid species num");
                 break;
         }
     
         while(!player.isClaimable(firstLand) ||findOwner(firstLand)!=null){
-            System.out.println("finding tile to live");
             firstLand=getTile((int)(Math.random()*gameMap.size()));
         }
 
@@ -96,7 +98,6 @@ public class Grid extends JPanel{
     }
 
     public Empire findOwner(Land tile){
-        
         for(Empire e: factions){
             if(e.isOwner(tile)&&tile!=null){
                 return e;
@@ -104,7 +105,7 @@ public class Grid extends JPanel{
         }
         return null;
     }
-    
+
     public void updateTurn(){
         for (int i = 0; i < 20; i++)
         {
@@ -131,8 +132,13 @@ public class Grid extends JPanel{
                 {
                     for(int j = 0; j < faction.getTroops(); j++)
                     {
-                        claimRandomTile(faction);
-                        faction.updateTiles();
+                        try{
+                            claimRandomTile(faction);
+                            faction.updateTiles();
+                        }
+                        catch(Exception e){
+                            System.out.println("error occured when taking tile ");
+                        }
                     }
                 }
                 else
@@ -180,7 +186,7 @@ public class Grid extends JPanel{
     public void update(){
 
     }
-    public void claimRandomTile(Empire faction){
+    public void claimRandomTile(Empire faction)throws Exception{
         ArrayList<Land> list = faction.getPlayableBorderTiles();
         Land borderTile, tileToclaim;
         if (list.isEmpty())
