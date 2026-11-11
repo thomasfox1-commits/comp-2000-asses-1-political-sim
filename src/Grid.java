@@ -1,11 +1,24 @@
 import java.awt.*;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
 import javax.lang.model.util.ElementScanner14;
 import javax.swing.*;
 public class Grid extends JPanel{
-    private TreeMap<Integer,Land> gameMap;
+
     private int gridSize;
+    private TreeMap<Integer,Land> gameMap;
+
     private ArrayList<Empire> factions;
+
+    private double forestFireExtinquishChance= 0.4;
+    private double forestFireChance=0.2;
+    
+
+
+
     public  Grid(int width,int height, int gridSize,int factCount){
         gameMap = new TreeMap<Integer,Land>();
         this.gridSize = gridSize;
@@ -67,31 +80,6 @@ public class Grid extends JPanel{
             int blueVal = 100+(155/((int)Math.ceil(Math.cbrt(factCount)-1)))*((int)(Math.floor(i/((int)Math.ceil(Math.cbrt(factCount))*(int)Math.ceil(Math.cbrt(factCount)))))%(int)Math.ceil(Math.cbrt(factCount)));
             Color factCol = new Color(redVal, greenVal, blueVal);
 
-            //RANDOMISED COLOURS (CAN LOOP FOREVER WITH TOO MANY FACTIONS)
-            /* 
-            Color factCol = new Color((int)(25*Math.random()*10), (int)(25*Math.random()*10), (int)(25*Math.random()*10));
-            Boolean newCol = false;
-            while (newCol == false)
-            {
-                if (factCol.getBlue() < 40 && factCol.getRed() < 40 && factCol.getGreen() < 40)
-                {
-                    factCol = new Color((int)(25*Math.random()*10), (int)(25*Math.random()*10), (int)(25*Math.random()*10));
-                    continue;
-                }
-
-                newCol = true;
-                for (int j = 0; j < factions.size(); j++)
-                {
-                    if (Math.abs(factions.get(j).getColor().getRed()-factCol.getRed()) < 60 && Math.abs(factions.get(j).getColor().getGreen()-factCol.getGreen()) < 60 && Math.abs(factions.get(j).getColor().getBlue()-factCol.getBlue()) < 60)
-                    {
-                        factCol = new Color((int)(25*Math.random()*10), (int)(25*Math.random()*10), (int)(25*Math.random()*10));
-                        newCol = false;
-                        break;
-                    }
-                }
-            }
-            */
-
             Empire faction = new Empire(factCol, i+1);
             while (startLand.getOwner() != null || startLand instanceof Impassable)
             {
@@ -102,12 +90,18 @@ public class Grid extends JPanel{
             factions.add(faction);
         }
     }
+    private ArrayList<Land> getTiles(Predicate<Land> operation){
+        Supplier<ArrayList<Land>> supplier = ArrayList::new;
+        return gameMap.values().stream().parallel().filter(operation).collect(Collectors.toCollection(supplier)) ;
 
+    }
     public void updateTurn(){
-        for (int i = 0; i < 20; i++)
-        {
-            System.out.println();
-        }
+        // for (int i = 0; i < 20; i++)
+        // {
+        //     System.out.println();
+        // }
+        ForestFireCheck();
+        
 
         ArrayList<Integer> skipTurns = new ArrayList<>();
         for(int i = 0; i < factions.size(); i++)
@@ -149,19 +143,49 @@ public class Grid extends JPanel{
                 }
             }
 
-            System.out.println("Faction " + faction.getID() + " Colour: " + faction.getColor().toString());
-            System.out.println("Faction " + faction.getID() + " Troops: " + faction.getTroops());
-            System.out.println("Faction " + faction.getID() + " Total Tiles: " + faction.getTileCount());
-            System.out.println("Faction " + faction.getID() + " Improvable Tiles: " + faction.getImprovableCount());
-            for (int j = 0; j < faction.getAllies().size(); j++)
-            {
-                if (factions.contains(faction.getAllies().get(j)))
-                {
-                    System.out.println("Faction " + faction.getID() + " Allied With " + faction.getAllies().get(j).getID());
-                }
-            }
-            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            // System.out.println("Faction " + faction.getID() + " Colour: " + faction.getColor().toString());
+            // System.out.println("Faction " + faction.getID() + " Troops: " + faction.getTroops());
+            // System.out.println("Faction " + faction.getID() + " Total Tiles: " + faction.getTileCount());
+            // System.out.println("Faction " + faction.getID() + " Improvable Tiles: " + faction.getImprovableCount());
+            // for (int j = 0; j < faction.getAllies().size(); j++)
+            // {
+            //     if (factions.contains(faction.getAllies().get(j)))
+            //     {
+            //         System.out.println("Faction " + faction.getID() + " Allied With " + faction.getAllies().get(j).getID());
+            //     }
+            // }
+            // System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
         }
+    }
+    public void ForestFireCheck(){
+        double chanceRoll = Math.random();
+        //System.out.println(getTiles(x->x instanceof Forest && x instanceof Burnable ).toString());
+        System.out.println();
+        if (chanceRoll < forestFireChance){
+            createForestFire();
+            //System.out.println("create forest fire");
+        }
+        else if (chanceRoll < forestFireExtinquishChance){
+            extinquishForestFire();
+            //System.out.println("extinquish forest fire");
+        }
+    }
+    private void extinquishForestFire(){
+        ArrayList<Land> list = getTiles(x->x instanceof Forest && x instanceof Burnable && ((Burnable)x).isBurning());
+        if(list==null|| list.size()==0){
+            //System.out.println("no forests to extinquish");
+            return;
+        }
+        ((Forest)list.get((int)(Math.random()*list.size()))).swithStrategy(new Growing());
+    }
+
+    private void createForestFire(){
+        ArrayList<Land> list =getTiles(x->x instanceof Forest && x instanceof Burnable && !((Burnable)x).isBurning());
+        if(list==null|| list.size()==0){
+            //System.out.println("no forests to ignite");
+            return;
+        }
+        ((Forest)list.get((int)(Math.random()*list.size()))).swithStrategy(new Burning());
     }
 
     public Land getTile(int ID){

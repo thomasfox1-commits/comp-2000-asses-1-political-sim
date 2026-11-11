@@ -77,6 +77,7 @@ public class Empire {
 
         if (tile instanceof Improvable){
             improvables.add(tile);
+            ((Forest)tile).setUsed(false);
         }
 
         if (tile.getOwner() != null)
@@ -116,7 +117,7 @@ public class Empire {
     public void improveTile()
     {
         Land l = improvables.get((int)Math.floor(Math.random() * improvables.size()));
-        if (l instanceof Improvable tile && tile.getBonus() < 1)
+        if (l instanceof Improvable tile && (tile.getBonus() < 1||((Burnable)l).isBurning()))
         {
 
             l.setBackground(Color.lightGray);
@@ -124,9 +125,12 @@ public class Empire {
         }
         else
         {
-            l.setBackground(Color.darkGray);
-            troops++;
-            improvables.remove(l);
+            if(!((Forest)l).isUsed()){
+                ((Forest)l).setUsed(true);
+                l.setBackground(Color.darkGray);
+                troops++;
+            }
+            //improvables.remove(l);
         }
     }
     public int getImprovableCount()

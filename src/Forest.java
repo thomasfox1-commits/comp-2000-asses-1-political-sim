@@ -4,6 +4,7 @@ import java.awt.Graphics;
 public class Forest extends Land implements Improvable, Burnable{
     private Growth strategy;
     private double growthBonus;
+    private boolean used=false;
 
     int[] xPoints = {5, 30, 50, 70, 95};
     int[] yPoints = {75, 15, 60, 15, 75};
@@ -15,6 +16,13 @@ public class Forest extends Land implements Improvable, Burnable{
     public Forest(){
         growthBonus = 0.2;
         strategy=new Growing();
+    }
+    public Boolean isUsed(){
+        return used;
+    }
+
+    public void setUsed(Boolean status){
+        used=status;
     }
     
     public void levelUp(){
@@ -66,5 +74,9 @@ public class Forest extends Land implements Improvable, Burnable{
         g.setColor(strategy.getStatusColor());
         
         g.fillPolygon(xPoints, yPoints, xPoints.length);
+    }
+    @Override
+    public String toString() {
+        return "Tile ID: "+ getID()+" | Burning: "+ isBurning()+" | current growth: "+ getBonus();
     }
 }
