@@ -1,5 +1,8 @@
 import java.awt.*;
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
 public class Empire {
     private ArrayList<Land> ownedLand;
     private ArrayList<Land> improvables;
@@ -27,34 +30,47 @@ public class Empire {
     }
 
     public ArrayList<Land> getBorderTiles(){
-        ArrayList<Land> list= new ArrayList<>();
-        if (ownedLand==null){
-            return null;
-        }
-        for(Land l:ownedLand){
-            for(Land x: l.getAdjTiles()){
-                if(!isOwner(x)){
-                    list.add(l);
-                    break;
+        // ArrayList<Land> list= new ArrayList<>();
+        // if (ownedLand==null){
+        //     return null;
+        // }
+        // for(Land l:ownedLand){
+        //     for(Land x: l.getAdjTiles()){
+        //         if(!isOwner(x)){
+        //             list.add(l);
+        //             break;
+        //         }
+        //     }
+        // }
+       
+        return getTiles(x->{
+            for(Land i: x.getAdjTiles()){
+                if(!isOwner(i)){
+                    return true;
                 }
             }
-        }
-        return list;
+            return false;
+        });
     }
     public ArrayList<Land> getPlayableBorderTiles(){
-        ArrayList<Land> list= new ArrayList<>();
-        if (ownedLand==null){
-            return null;
-        }
-        for(Land l:ownedLand){
-            for(Land x: l.getAdjTiles()){
-                if(!isOwner(x)&&isClaimable(x)){
-                    list.add(l);
-                    break;
-                }
-            }
-        }
-        return list;
+        // ArrayList<Land> list= new ArrayList<>();
+        // if (ownedLand==null){
+        //     return null;
+        // }
+        // for(Land l:ownedLand){
+        //     if(l.isBorder(this)){
+        //         list.add(l);
+        //     }
+        // }
+        //System.out.println("old function size: "+ list.size());
+        //System.out.println("new function size: "+ getTiles(x->x.isBorder(this)).size());
+        return getTiles(x->x.isBorder(this));
+    }
+
+    private ArrayList<Land> getTiles(Predicate<Land> operation){
+        Supplier<ArrayList<Land>> supplier = ArrayList::new;
+        return ownedLand.stream().parallel().filter(operation).collect(Collectors.toCollection(supplier)) ;
+
     }
     public void addTile(Land tile){
         ownedLand.add(tile);

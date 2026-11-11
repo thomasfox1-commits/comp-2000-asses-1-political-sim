@@ -1,7 +1,8 @@
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class Forest extends Land implements Improvable{
+public class Forest extends Land implements Improvable, Burnable{
+    private Growth strategy;
     private double growthBonus;
 
     int[] xPoints = {5, 30, 50, 70, 95};
@@ -13,14 +14,24 @@ public class Forest extends Land implements Improvable{
     
     public Forest(){
         growthBonus = 0.2;
+        strategy=new Growing();
     }
     
     public void levelUp(){
-        growthBonus += 0.4;
+        growthBonus =strategy.addGrowth(growthBonus);
     }
 
     public double getBonus(){
         return growthBonus;
+    }
+    public void swithStrategy(Growth strategy){
+        if(strategy!=null){
+            this.strategy=strategy;
+            repaint();
+        }
+    }
+    public boolean isBurning(){
+        return strategy instanceof Burning;
     }
 
     @Override
@@ -52,7 +63,8 @@ public class Forest extends Land implements Improvable{
         g.setColor(new Color(100,65,23)); 
         g.fillRect(firstRect[0], firstRect[1], rectX, rectY);
         g.fillRect(secondRect[0], secondRect[1], rectX, rectY);
-        g.setColor(new Color(31,80,44));
+        g.setColor(strategy.getStatusColor());
+        
         g.fillPolygon(xPoints, yPoints, xPoints.length);
     }
 }
