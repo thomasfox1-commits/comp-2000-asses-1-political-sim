@@ -21,6 +21,15 @@ abstract class  Land  extends JPanel  {
         below=null;
         owner = null;
     }
+    public Boolean isBorder(Empire empire){
+        for(Land tile:getAdjTiles()){
+            if(empire.isClaimable(tile)&&!empire.isOwner(tile)){
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public void setRight(Land land){
         right=land;
